@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Simples</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+
+    .calculator {
+      border: 2px solid #ccc;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+    }
+
+    .calculator input {
+      width: 240px;
+      height: 50px;
+      text-align: right;
+      font-size: 24px;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .calculator button {
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #f5f5f5;
+    }
+
+    .calculator button:hover {
+      background-color: #ddd;
+    }
+
+    .calculator button.clear {
+      background-color: #ff6666;
+      color: white;
+    }
+
+    .calculator button.equals {
+      background-color: #66cc66;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <input id="display" type="text" disabled/>
+    <br/>
+    <button onclick="appendNumber('7')">7</button>
+    <button onclick="appendNumber('8')">8</button>
+    <button onclick="appendNumber('9')">9</button>
+    <button onclick="chooseOperation('+')">+</button>
+    <br/>
+    <button onclick="appendNumber('4')">4</button>
+    <button onclick="appendNumber('5')">5</button>
+    <button onclick="appendNumber('6')">6</button>
+    <button onclick="chooseOperation('-')">-</button>
+    <br/>
+    <button onclick="appendNumber('1')">1</button>
+    <button onclick="appendNumber('2')">2</button>
+    <button onclick="appendNumber('3')">3</button>
+    <button onclick="chooseOperation('*')">*</button>
+    <br/>
+    <button onclick="appendNumber('0')">0</button>
+    <button onclick="clearDisplay()" class="clear">C</button>
+    <button onclick="calculate()" class="equals">=</button>
+    <button onclick="chooseOperation('/')">/</button>
+  </div>
+
+  <script>
+    let currentInput = '';
+    let previousInput = '';
+    let operator = '';
+
+    function appendNumber(number) {
+      currentInput += number;
+      document.getElementById('display').value = currentInput;
+    }
+
+    function chooseOperation(op) {
+      if (currentInput === '') return; // Não faz nada se não houver um número
+      if (previousInput !== '') {
+        calculate();
+      }
+      operator = op;
+      previousInput = currentInput;
+      currentInput = '';
+    }
+
+    function clearDisplay() {
+      currentInput = '';
+      previousInput = '';
+      operator = '';
+      document.getElementById('display').value = '';
+    }
+
+    function calculate() {
+      let result;
+      const prev = parseFloat(previousInput);
+      const current = parseFloat(currentInput);
+
+      if (isNaN(prev) || isNaN(current)) return; // Se algum valor for inválido
+
+      switch (operator) {
+        case '+':
+          result = prev + current;
+          break;
+        case '-':
+          result = prev - current;
+          break;
+        case '*':
+          result = prev * current;
+          break;
+        case '/':
+          if (current === 0) {
+            alert("Não é possível dividir por zero!");
+            clearDisplay();
+            return;
+          }
+          result = prev / current;
+          break;
+        default:
+          return;
+      }
+
+      currentInput = result.toString();
+      operator = '';
+      previousInput = '';
+      document.getElementById('display').value = currentInput;
+    }
+  </script>
+
+</body>
+</html>
